@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cfl.dao.BooksDiscussDAO">
+    <resultMap id="booksDiscussMap" type="com.cfl.vo.BooksDiscussVo">
+        <id column="id" property="id"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="books_id" property="booksId"></result>
+        <result column="publish_time" property="publishTime"></result>
+        <result column="content" property="content"></result>
+        <association property="booksVo" javaType="com.cfl.vo.BooksVo">
+            <result column="bname" property="name"></result>
+        </association>
+        <association property="userVo" javaType="com.cfl.vo.UserVo">
+            <result column="uname" property="name"></result>
+        </association>
+    </resultMap>
+    <select id="getById" resultMap="booksDiscussMap" parameterType="long">
+        select t.*,b.name as bname,u.name as uname from t_books_discuss t,t_books b,t_user u  where  t.id = #{id} and t.books_id=b.id and t.user_id=u.id
+    </select>
+    <delete id="removeById" parameterType="long">
+        delete from t_books_discuss where id = #{id}
+    </delete>
+    <select id="listPage" resultMap="booksDiscussMap">
+        select t.*,b.name as bname,u.name as uname from t_books_discuss t,t_books b,t_user u  where t.books_id=b.id and t.user_id=u.id <if test="id!=null"> and t.books_id=#{id}</if> order by t.publish_time desc limit #{pageNo},#{pageSize}
+    </select>
+    <select id="listAll" resultMap="booksDiscussMap">
+        select * from t_books_discuss
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(t.id) from t_books_discuss t,t_books b,t_user u where  t.books_id=b.id and t.user_id=u.id <if test="id!=null"> and t.books_id=#{id}</if>
+    </select>
+    <insert id="save" parameterType="booksDiscussVo">
+        insert into t_books_discuss (user_id, books_id, publish_time,content) values (#{userId}, #{booksId},#{publishTime},#{content})
+    </insert>
+    <update id="updateStatus">
+        update t_books_discuss set status=#{status} where id=#{id}
+    </update>
+    <update id="update">
+        update t_books_discuss set
+                user_id = #{userId},
+                books_id = #{booksId},
+                content=#{content}
+        where id = #{id}
+    </update>
+</mapper>

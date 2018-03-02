@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cfl.dao.BooksCollectDAO">
+    <resultMap id="booksCollectMap" type="com.cfl.vo.BooksCollectVo">
+        <id column="id" property="id"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="books_id" property="booksId"></result>
+        <result column="create_time" property="createTime"></result>
+        <association property="booksVo" javaType="com.cfl.vo.BooksVo">
+            <result column="bname" property="name"></result>
+        </association>
+        <association property="userVo" javaType="com.cfl.vo.UserVo">
+            <result column="uname" property="name"></result>
+        </association>
+    </resultMap>
+    <select id="getById" resultMap="booksCollectMap" parameterType="long">
+        select t.*,b.name as bname,u.name as uname from t_book_collect t,t_books b,t_user u  where  t.id = #{id} and t.books_id=b.id and t.user_id=u.id
+    </select>
+    <delete id="removeById" parameterType="long">
+        delete from t_book_collect where id = #{id}
+    </delete>
+    <select id="listPage" resultMap="booksCollectMap">
+        select t.*,b.name as bname,u.name as uname from t_book_collect t,t_books b,t_user u  where t.books_id=b.id and t.user_id=u.id order by t.create_time desc limit #{pageNo},#{pageSize}
+    </select>
+    <select id="listAll" resultMap="booksCollectMap">
+        select * from t_book_collect
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(t.id) from t_book_collect t,t_books b,t_user u where  t.books_id=b.id and t.user_id=u.id
+    </select>
+    <insert id="save" parameterType="booksCollectVo">
+        insert into t_book_collect (user_id, books_id, create_time) values (#{userId}, #{booksId},#{createTime})
+    </insert>
+    <update id="updateStatus">
+        update t_book_collect set status=#{status} where id=#{id}
+    </update>
+    <update id="update">
+        update t_book_collect set
+                user_id = #{userId},
+                books_id = #{booksId}
+        where id = #{id}
+    </update>
+</mapper>

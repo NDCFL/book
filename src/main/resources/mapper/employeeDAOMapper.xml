@@ -1,0 +1,35 @@
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cfl.dao.EmployeeDAO">
+	<resultMap type="userVo" id="employeeMap">
+	</resultMap>
+	<select id="getById" resultMap="employeeMap" parameterType="long">
+		select t.*  from t_user t where t.id = #{id}
+	</select>
+	<delete id="removeById" parameterType="long">
+		delete from t_user where id = #{id}
+	</delete>
+	<select id="listPage" resultMap="employeeMap" >
+		select u.* from t_user u,t_role r,t_user_role t where  u.id=t.user_id and r.id=t.role_id  order by u.create_time desc limit #{pageNo},#{pageSize}
+	</select>
+	<select id="listAll" resultMap="employeeMap">
+		select u.* from t_user u,t_role r,t_user_role t where u.id=t.user_id and r.id=t.role_id
+	</select>
+	<select id="count" resultType="long">
+		select count(*) from t_user u,t_role r,t_user_role t where  u.id=t.user_id and r.id=t.role_id
+	</select>
+	<insert id="save" parameterType="userVo">
+		insert into t_user (phone, password, name, realname, sex, age, qqopenid, wbopenid, wxopenid, isVip, money, status, create_time) values (#{phone}, #{password}, #{name}, #{realname}, #{sex}, #{age}, #{qqopenid}, #{wbopenid}, #{wxopenid}, #{isVip}, #{money}, #{status}, #{createTime})
+	</insert>
+	<update id="updateStatus">
+		update t_user set status=#{status} where id=#{id}
+	</update>
+	<update id="initPwd">
+		update t_user set password=#{password} where id=#{id}
+	</update>
+	<update id="update">
+		update t_user set realname=#{realname},name=#{name} where id = #{id}
+	</update>
+</mapper>

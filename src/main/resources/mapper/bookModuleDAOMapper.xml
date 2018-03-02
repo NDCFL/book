@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cfl.dao.BookModuleDAO">
+    <resultMap id="bookTypeMap" type="com.cfl.vo.BookModuleVo"></resultMap>
+    <resultMap id="select2VoMap" type="com.cfl.vo.Select2Vo"></resultMap>
+    <select id="getById" resultMap="bookTypeMap" parameterType="long">
+        select * from t_book_module where id = #{id}
+    </select>
+    <delete id="removeById" parameterType="long">
+        delete from t_book_module where id = #{id}
+    </delete>
+    <select id="listPage" resultMap="bookTypeMap">
+        select * from t_book_module  order by levels desc limit #{pageNo},#{pageSize}
+    </select>
+    <select id="listAll" resultMap="bookTypeMap">
+        select * from t_book_module
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(*) from t_book_module
+    </select>
+    <insert id="save" parameterType="bookTypeVo">
+        insert into t_book_module (name,levels, status, create_time) values (#{name},#{levels},#{status},#{createTime})
+    </insert>
+    <update id="updateStatus">
+        update t_book_module set status=#{status} where id=#{id}
+    </update>
+    <select id="getBookModule" resultMap="select2VoMap">
+        select id,name as text from t_book_module where status=0
+    </select>
+    <update id="update">
+        update t_book_module set
+                name = #{name},
+                levels = #{levels}
+        where id = #{id}
+    </update>
+</mapper>

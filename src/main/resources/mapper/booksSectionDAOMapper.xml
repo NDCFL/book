@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cfl.dao.BooksSectionDAO">
+    <resultMap id="booksSectionMap" type="com.cfl.vo.BooksSectionVo">
+        <id column="id" property="id"></id>
+        <result column="books_id" property="booksId"></result>
+        <result column="name" property="name"></result>
+        <result column="title" property="title"></result>
+        <result column="content" property="content"></result>
+        <result column="publish_time" property="publishTime"></result>
+        <result column="is_money" property="isMoney"></result>
+        <result column="book_money" property="bookMoney"></result>
+        <association property="booksVo" javaType="com.cfl.vo.BooksVo">
+            <result column="bname" property="name"></result>
+        </association>
+        <association property="bookTypeVo" javaType="com.cfl.vo.BookTypeVo">
+            <result column="bt_name" property="name"></result>
+        </association>
+    </resultMap>
+    <select id="getById" resultMap="booksSectionMap" parameterType="long">
+        select t.*,b.name as bname,bt.name as btname from t_books_section t,t_books b,t_booktype bt  where t.id = #{id} and t.books_id=b.id and bt.id=b.book_type_id
+    </select>
+    <delete id="removeById" parameterType="long">
+        delete from t_books_section where id = #{id}
+    </delete>
+    <select id="listPage" resultMap="booksSectionMap">
+        select t.*,b.name as bname,bt.name as btname from t_books_section t,t_books b,t_booktype bt  where t.books_id=b.id and bt.id=b.book_type_id and t.books_id=#{id} <if test="sx==1">order by t.id desc</if> limit #{pageNo},#{pageSize}
+    </select>
+    <select id="listAll" resultMap="booksSectionMap">
+        select * from t_books_section
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(t.id) from t_books_section t,t_books b,t_booktype bt  where t.books_id=b.id and bt.id=b.book_type_id and t.books_id=#{id} <if test="sx==1">order by t.id desc</if>
+    </select>
+    <insert id="save" parameterType="bookTypeVo">
+        insert into t_books_section (books_id, name, title, content, publish_time, is_money,book_money) values (#{booksId},#{name}, #{title}, #{content}, #{publishTime}, #{isMoney},#{bookMoney})
+    </insert>
+    <update id="updateStatus">
+        update t_books_section set status=#{status} where id=#{id}
+    </update>
+    <update id="update">
+        update t_books_section set
+                name = #{name},
+                title = #{title},
+                content = #{content},
+                publish_time = #{publishTime},
+                is_money = #{isMoney},
+                book_money = #{bookMoney}
+        where id = #{id}
+    </update>
+</mapper>

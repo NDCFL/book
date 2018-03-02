@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cfl.dao.BookTypeDAO">
+    <resultMap id="bookTypeMap" type="com.cfl.vo.BookTypeVo"></resultMap>
+    <resultMap id="select2VoMap" type="com.cfl.vo.Select2Vo"></resultMap>
+    <sql id="Base_Column_List">id, name,introduction,create_time,status</sql>
+    <select id="getById" resultMap="bookTypeMap" parameterType="long">
+        select * from t_booktype where id = #{id}
+    </select>
+    <delete id="removeById" parameterType="long">
+        delete from t_booktype where id = #{id}
+    </delete>
+    <select id="listPage" resultMap="bookTypeMap">
+        select * from t_booktype  order by create_time desc limit #{pageNo},#{pageSize}
+    </select>
+    <select id="listAll" resultMap="bookTypeMap">
+        select * from t_booktype
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(*) from t_booktype
+    </select>
+    <insert id="save" parameterType="bookTypeVo">
+        insert into t_booktype (name, introduction, status, create_time) values (#{name},#{introduction},#{status},#{createTime})
+    </insert>
+    <update id="updateStatus">
+        update t_booktype set status=#{status} where id=#{id}
+    </update>
+    <select id="getBookType" resultMap="select2VoMap">
+        select id,name as text from t_booktype where status=0
+    </select>
+    <update id="update">
+        update t_booktype set
+                name = #{name},
+                introduction = #{introduction}
+        where id = #{id}
+    </update>
+</mapper>
