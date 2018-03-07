@@ -16,7 +16,8 @@ public class BooksSectionVo implements Serializable  {
     private BooksVo booksVo;//图书组件bean
     private BookTypeVo bookTypeVo;//小说类型组件
     private Integer sx;//排序顺序,0:升序，1：倒叙
-    private Integer bookMoney;//收费时所需书币
+    private Integer bookMoney;//收费时所需书币\
+    private Long cnt;
 
     public Long getId() {
         return id;
@@ -112,5 +113,13 @@ public class BooksSectionVo implements Serializable  {
 
     public void setBookMoney(Integer bookMoney) {
         this.bookMoney = bookMoney;
+    }
+
+    public Long getCnt() {
+        return cnt;
+    }
+
+    public void setCnt(Long cnt) {
+        this.cnt = cnt;
     }
 }

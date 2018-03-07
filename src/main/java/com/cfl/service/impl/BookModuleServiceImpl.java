@@ -55,4 +55,9 @@ public class BookModuleServiceImpl implements BookModuleService{
     public List<Select2Vo> getBookModule() {
         return bookModuleDAO.getBookModule();
     }
+
+    @Override
+    public List<BookModuleVo> getInfo() {
+        return bookModuleDAO.getInfo();
+    }
 }

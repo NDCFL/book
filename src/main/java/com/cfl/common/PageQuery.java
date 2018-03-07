@@ -14,9 +14,10 @@ public class PageQuery {
     private String searchVal;
     private Integer sx;
     private Long id;
+    private Long bookId;
+    private Long sectionId;
     public PageQuery() {
     }
-
     public PageQuery(String searchVal) {
         this.searchVal = searchVal;
     }
@@ -64,5 +65,21 @@ public class PageQuery {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
+
+    public Long getSectionId() {
+        return sectionId;
+    }
+
+    public void setSectionId(Long sectionId) {
+        this.sectionId = sectionId;
     }
 }

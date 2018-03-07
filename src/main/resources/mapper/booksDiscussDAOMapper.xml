@@ -26,6 +26,9 @@
     <select id="listAll" resultMap="booksDiscussMap">
         select * from t_books_discuss
     </select>
+    <select id="getMuLu" resultMap="booksDiscussMap">
+        select t.*,b.name as bname,u.name as uname from t_books_discuss t,t_books b,t_user u  where t.books_id=b.id and t.user_id=u.id and t.books_id=#{id} order by t.publish_time desc limit #{pageNo},#{pageSize}
+    </select>
     <select id="count" resultType="java.lang.Long">
         select count(t.id) from t_books_discuss t,t_books b,t_user u where  t.books_id=b.id and t.user_id=u.id <if test="id!=null"> and t.books_id=#{id}</if>
     </select>

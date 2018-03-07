@@ -8,6 +8,8 @@ import com.cfl.common.StatusQuery;
 import com.cfl.enums.ActiveStatusEnum;
 import com.cfl.service.BooksSectionService;
 import com.cfl.vo.BooksSectionVo;
+import com.cfl.vo.MinAndMaxIdVo;
+import com.cfl.vo.Select2Vo;
 import com.cfl.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -23,7 +25,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by chenfeilong on 2017/10/21.
@@ -75,6 +79,93 @@ public class BooksSectionController {
     public BooksSectionVo findBooksSection(@PathVariable("id") long id){
         BooksSectionVo books = booksSectionService.getById(id);
         return books;
+    }
+    @RequestMapping("/getPageList")
+    @ResponseBody
+    public PagingBean getPageList(long bookId,Integer pageSize,Integer pageIndex){
+        PagingBean pagingBean = new PagingBean();
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setId(bookId);
+        pageQuery.setPageNo(pageIndex);
+        pageQuery.setPageSize(pageSize);
+        pagingBean.setTotal(booksSectionService.count(pageQuery));
+        pagingBean.setrows(booksSectionService.listPage(pageQuery));
+        return pagingBean;
+    }
+    @RequestMapping("/getList/{id}")
+    @ResponseBody
+    public List<BooksSectionVo> getList(@PathVariable("id") long id){
+        return booksSectionService.getList(id);
+    }
+    @RequestMapping("/mulu")
+    @ResponseBody
+    public PagingBean mulu(long bookId,Integer pageSize,int sx){
+        PagingBean pagingBean = new PagingBean();
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setBookId(bookId);
+        pageQuery.setId(bookId);
+        pageQuery.setSx(sx);
+        long count = booksSectionService.count(pageQuery);
+        pagingBean.setTemp(count);
+        long pages = (long) Math.ceil((float)count/pageSize);
+        List<Select2Vo> muluList = new ArrayList<>();
+        for (int i=0;i<pages;i++){
+            Select2Vo select2Vo = new Select2Vo();
+            select2Vo.setId(i+1);
+            select2Vo.setText((i+1)+"/"+pages);
+            muluList.add(select2Vo);
+        }
+        pagingBean.setMulu(muluList);
+        pageQuery.setPageNo(0);
+        pageQuery.setPageSize(20);
+        pagingBean.setTotal(pages);
+        pagingBean.setrows(booksSectionService.getMuLu(pageQuery));
+        return pagingBean;
+    }
+    @RequestMapping("/upList")
+    @ResponseBody
+    public BooksSectionVo upList(PageQuery pageQuery){
+        BooksSectionVo booksSectionVo = new BooksSectionVo();
+        booksSectionVo = booksSectionService.upList(pageQuery);
+        if(booksSectionVo==null){
+            MinAndMaxIdVo minAndMaxIdVo= booksSectionService.minAndMaxId(pageQuery);
+            pageQuery.setSectionId(minAndMaxIdVo.getMinId()+1);
+            booksSectionVo = booksSectionService.upList(pageQuery);
+        }
+        return booksSectionVo;
+    }
+    @RequestMapping("/downList")
+    @ResponseBody
+    public BooksSectionVo downList(PageQuery pageQuery){
+        BooksSectionVo booksSectionVo = new BooksSectionVo();
+        booksSectionVo = booksSectionService.downList(pageQuery);
+        if(booksSectionVo==null){
+            MinAndMaxIdVo minAndMaxIdVo= booksSectionService.minAndMaxId(pageQuery);
+            pageQuery.setSectionId(minAndMaxIdVo.getMaxId()-1);
+            booksSectionVo = booksSectionService.downList(pageQuery);
+        }
+        return booksSectionVo;
+    }
+    @RequestMapping("/getMaxAndMinVo/{id}")
+    @ResponseBody
+    public MinAndMaxIdVo getMaxAndMinVo(@PathVariable Long id){
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setBookId(id);
+        return booksSectionService.minAndMaxId(pageQuery);
+    }
+    @RequestMapping("/getMulu")
+    @ResponseBody
+    public List<BooksSectionVo> getMulu(PageQuery pageQuery){
+        pageQuery.setId(pageQuery.getBookId());
+        long count = booksSectionService.count(pageQuery);
+        long pages = (long) Math.ceil((float)count/pageQuery.getPageSize());
+        if(pageQuery.getPageNo()>=pages){
+            pageQuery.setPageNo((int)pages);
+        }else if(pageQuery.getPageNo()<=1){
+            pageQuery.setPageNo(1);
+        }
+        pageQuery.setPageNo((pageQuery.getPageNo()-1)*pageQuery.getPageSize());
+        return booksSectionService.getMuLu(pageQuery);
     }
     @RequestMapping("/booksSectionUpdateSave")
     @ResponseBody

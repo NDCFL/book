@@ -24,15 +24,16 @@ public class FileUpController {
             //重新格式化文件名称
             //String fileName = getFileName(file.getOriginalFilename());
             String path = request.getSession().getServletContext().getRealPath("upload");
-            File dir = new File(path,fileName);
+            String names = getFileName(fileName);
+            File dir = new File(path,names);
             if(!dir.exists()){
                 dir.mkdirs();
             }
             file.transferTo(dir);
             Map<String,String> data = new HashMap<String, String>();
-            data.put("src","/upload/"+fileName);
+            data.put("src","/upload/"+names);
             fileVo.setData(data);
-            System.out.println("保存到数据库的图片地址:/upload/"+fileName);
+            System.out.println("保存到数据库的图片地址:/upload/"+names);
             fileVo.setCode(0);
         }catch (Exception e){
             e.printStackTrace();

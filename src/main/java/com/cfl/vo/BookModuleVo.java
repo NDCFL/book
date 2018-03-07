@@ -2,6 +2,7 @@ package com.cfl.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class BookModuleVo implements Serializable {
     private Long id;//'小说模块等级',
@@ -9,6 +10,7 @@ public class BookModuleVo implements Serializable {
     private Integer levels;//'小说模块排序级别',
     private Integer status;//'小说模块状态',
     private Date createTime = new Date();//'小说创建时间'
+    private List<BooksVo> booksVoList;
     public Long getId() {
         return id;
     }
@@ -47,5 +49,13 @@ public class BookModuleVo implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public List<BooksVo> getBooksVoList() {
+        return booksVoList;
+    }
+
+    public void setBooksVoList(List<BooksVo> booksVoList) {
+        this.booksVoList = booksVoList;
     }
 }

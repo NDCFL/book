@@ -3,6 +3,7 @@ package com.cfl.vo;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 
 public class BooksVo implements Serializable {
 
@@ -27,7 +28,8 @@ public class BooksVo implements Serializable {
     private Date createTime = new Date();//创建时间
     private Long bookModule;//模块编号
     private String bookModuleName;//所属小说模块名称
-
+    private BookModuleVo bookModuleVo;
+    private List<BooksSectionVo> booksSectionVoList;
     public Long getId() {
         return id;
     }
@@ -194,5 +196,21 @@ public class BooksVo implements Serializable {
 
     public void setBookModuleName(String bookModuleName) {
         this.bookModuleName = bookModuleName;
+    }
+
+    public BookModuleVo getBookModuleVo() {
+        return bookModuleVo;
+    }
+
+    public void setBookModuleVo(BookModuleVo bookModuleVo) {
+        this.bookModuleVo = bookModuleVo;
+    }
+
+    public List<BooksSectionVo> getBooksSectionVoList() {
+        return booksSectionVoList;
+    }
+
+    public void setBooksSectionVoList(List<BooksSectionVo> booksSectionVoList) {
+        this.booksSectionVoList = booksSectionVoList;
     }
 }

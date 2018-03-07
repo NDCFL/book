@@ -35,6 +35,15 @@ $('#mytab').bootstrapTable({
             valign: 'middle'
         },
         {
+            title: '小说封面',
+            field: 'faceImg',
+            align: 'center',
+            sortable: true,
+            formatter: function (value, row, index) {
+                return '<img src="'+value+'" style="width: 100px;height: 100px"></img>';
+            }
+        },
+        {
             title: '小说名称',
             field: 'name',
             align: 'center',

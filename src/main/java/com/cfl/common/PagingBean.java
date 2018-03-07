@@ -1,5 +1,7 @@
 package com.cfl.common;
 
+import com.cfl.vo.Select2Vo;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -16,17 +18,16 @@ public class PagingBean<T> implements Serializable{
 	//当前页数
 	private int currentPage;
 	private List<T> rows;
-
+	private List<Select2Vo> mulu;
+	private Long temp;
 	public PagingBean() {
 	}
-
 	public PagingBean(int total, int pageSize, int currentPage, List<T> rows) {
 		this.total = total;
 		this.pageSize = pageSize;
 		this.currentPage = currentPage;
 		this.rows = rows;
 	}
-
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
 	}
@@ -64,5 +65,21 @@ public class PagingBean<T> implements Serializable{
 	}
 	public int getStartIndex(){
 		return (currentPage-1)*pageSize;
+	}
+
+	public List<Select2Vo> getMulu() {
+		return mulu;
+	}
+
+	public void setMulu(List<Select2Vo> mulu) {
+		this.mulu = mulu;
+	}
+
+	public Long getTemp() {
+		return temp;
+	}
+
+	public void setTemp(Long temp) {
+		this.temp = temp;
 	}
 }

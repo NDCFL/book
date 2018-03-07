@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cfl.dao.BookModuleDAO">
-    <resultMap id="bookTypeMap" type="com.cfl.vo.BookModuleVo"></resultMap>
+    <resultMap id="bookListMap" type="com.cfl.vo.BookModuleVo">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="levels" property="levels"></result>
+        <result column="status" property="status"></result>
+        <result column="create_time" property="createTime"></result>
+        <collection property="booksVoList" ofType="com.cfl.vo.BooksVo">
+            <id column="bid" property="id"></id>
+            <result column="bname" property="name"></result>
+            <result column="introduction" property="introduction"></result>
+            <result column="reward_count" property="rewardCount"></result>
+            <result column="face_img" property="faceImg"></result>
+            <result column="bc" property="createTime"></result>
+            <result column="bookTypeName" property="bookTypeName"></result>
+        </collection>
+    </resultMap>
+    <resultMap id="bookTypeMap" type="com.cfl.vo.BookModuleVo">
+    </resultMap>
     <resultMap id="select2VoMap" type="com.cfl.vo.Select2Vo"></resultMap>
     <select id="getById" resultMap="bookTypeMap" parameterType="long">
         select * from t_book_module where id = #{id}
@@ -14,6 +31,9 @@
     </select>
     <select id="listAll" resultMap="bookTypeMap">
         select * from t_book_module
+    </select>
+    <select id="getInfo" resultMap="bookListMap">
+          select t.*,b.id as bid,b.name as bname,b.create_time as bc,b.face_img,b.introduction ,b.reward_count,(select name from t_booktype where id=b.book_type_id ) as bookTypeName  from t_book_module t,t_books b where t.id=b.book_module  order by t.levels desc
     </select>
     <select id="count" resultType="java.lang.Long">
         select count(*) from t_book_module

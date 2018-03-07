@@ -52,6 +52,27 @@ public class BooksController {
     public List<BooksVo> geBooksByList() throws  Exception{
        return  booksService.getBooksByList();
     }
+    @RequestMapping("getListBooks/{id}")
+    @ResponseBody
+    public List<BooksVo> getListBooks(@PathVariable("id") Integer id) throws  Exception{
+        String ifVal = "";
+        if(id==null){
+            ifVal = "read_count";
+        }else {
+            switch (id){
+                case 0:
+                    ifVal = "read_count ";
+                    break;
+                case 1:
+                    ifVal = "collect_count ";
+                    break;
+                case 2:
+                    ifVal = "create_time ";
+                    break;
+            }
+        }
+        return  booksService.getListBooks(ifVal);
+    }
     @RequestMapping("/booksAddSave")
     @ResponseBody
     public Message addSaveBooks(BooksVo books,HttpSession session) throws  Exception {

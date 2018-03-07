@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface BookModuleDAO extends BaseDAO<BookModuleVo>{
     List<Select2Vo> getBookModule();
+    List<BookModuleVo> getInfo();
 }

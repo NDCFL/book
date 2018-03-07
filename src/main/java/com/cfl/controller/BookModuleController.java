@@ -108,6 +108,11 @@ public class BookModuleController {
     public String table() throws  Exception{
         return "book/bookModuleList";
     }
+    @RequestMapping("/getList")
+    @ResponseBody
+    public List<BookModuleVo> getList() throws  Exception{
+        return bookModuleService.getInfo();
+    }
     @RequestMapping("updateStatus/{id}/{status}")
     @ResponseBody
     public Message updateStatus(@PathVariable("id") long id,@PathVariable("status") int status) throws  Exception{

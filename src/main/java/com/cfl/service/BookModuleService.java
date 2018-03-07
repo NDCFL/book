@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface BookModuleService extends BaseService<BookModuleVo>{
     List<Select2Vo> getBookModule();
+    List<BookModuleVo> getInfo();
 }

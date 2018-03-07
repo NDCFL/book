@@ -7,6 +7,8 @@ import com.cfl.common.PagingBean;
 import com.cfl.common.StatusQuery;
 import com.cfl.service.BooksDiscussService;
 import com.cfl.vo.BooksDiscussVo;
+import com.cfl.vo.BooksSectionVo;
+import com.cfl.vo.Select2Vo;
 import com.cfl.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -22,7 +24,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by chenfeilong on 2017/10/21.
@@ -60,6 +64,44 @@ public class BooksDiscussController {
             return Message.fail("新增失败!");
         }
 
+    }
+    @RequestMapping("/mulu")
+    @ResponseBody
+    public PagingBean mulu(long bookId,Integer pageSize,Integer pageNo){
+        PagingBean pagingBean = new PagingBean();
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setBookId(bookId);
+        pageQuery.setId(bookId);
+        long count = booksDiscussService.count(pageQuery);
+        pagingBean.setTemp(count);
+        long pages = (long) Math.ceil((float)count/pageSize);
+        List<Select2Vo> muluList = new ArrayList<>();
+        for (int i=0;i<pages;i++){
+            Select2Vo select2Vo = new Select2Vo();
+            select2Vo.setId(i+1);
+            select2Vo.setText((i+1)+"/"+pages);
+            muluList.add(select2Vo);
+        }
+        pagingBean.setMulu(muluList);
+        pageQuery.setPageNo(pageNo);
+        pageQuery.setPageSize(pageSize);
+        pagingBean.setTotal(pages);
+        pagingBean.setrows(booksDiscussService.getMuLu(pageQuery));
+        return pagingBean;
+    }
+    @RequestMapping("/getMulu")
+    @ResponseBody
+    public List<BooksDiscussVo> getMulu(PageQuery pageQuery){
+        pageQuery.setId(pageQuery.getBookId());
+        long count = booksDiscussService.count(pageQuery);
+        long pages = (long) Math.ceil((float)count/pageQuery.getPageSize());
+        if(pageQuery.getPageNo()>=pages){
+            pageQuery.setPageNo((int)pages);
+        }else if(pageQuery.getPageNo()<=1){
+            pageQuery.setPageNo(1);
+        }
+        pageQuery.setPageNo((pageQuery.getPageNo()-1)*pageQuery.getPageSize());
+        return booksDiscussService.getMuLu(pageQuery);
     }
     @RequestMapping("/findBooksDiscuss/{id}")
     @ResponseBody

@@ -49,4 +49,9 @@ public class BooksDiscussServiceImpl implements BooksDiscussService{
     public long count(PageQuery pageQuery) {
         return booksDiscussDAO.count(pageQuery);
     }
+
+    @Override
+    public List<BooksDiscussVo> getMuLu(PageQuery pageQuery) {
+        return booksDiscussDAO.getMuLu(pageQuery);
+    }
 }

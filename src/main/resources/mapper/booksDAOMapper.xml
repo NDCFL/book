@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cfl.dao.BooksDAO">
-    <resultMap id="bookTypeMap" type="com.cfl.vo.BooksVo"></resultMap>
+    <resultMap id="booksMap" type="com.cfl.vo.BooksVo"></resultMap>
     <resultMap id="select2VoMap" type="com.cfl.vo.Select2Vo"></resultMap>
-    <select id="getById" resultMap="bookTypeMap" parameterType="long">
+    <select id="getById" resultMap="booksMap" parameterType="long">
         select t.*,(select name from t_booktype where t.book_type_id=t_booktype.id) as bookTypeName,(select name from t_book_module where t.book_module=t_book_module.id) as bookModuleName from t_books t  where t.id = #{id}
     </select>
     <delete id="removeById" parameterType="long">
@@ -12,10 +12,10 @@
     <select id="getBooks" resultMap="select2VoMap">
         select id,name as text from t_books
     </select>
-    <select id="listPage" resultMap="bookTypeMap">
+    <select id="listPage" resultMap="booksMap">
         select t.*,(select name from t_booktype where t.book_type_id=t_booktype.id) as bookTypeName,(select name from t_book_module where t.book_module=t_book_module.id) as bookModuleName  from t_books t  order by t.create_time desc limit #{pageNo},#{pageSize}
     </select>
-    <select id="listAll" resultMap="bookTypeMap">
+    <select id="listAll" resultMap="booksMap">
         select * from t_books
     </select>
     <select id="count" resultType="java.lang.Long">
@@ -24,8 +24,11 @@
     <insert id="save" parameterType="bookTypeVo">
         insert into t_books (name, title, introduction, book_type_id, author, word_count, `section`, update_time, face_img, collect_count, reward_count, discuss_count, read_count, publish_user_id, is_last, status,create_time,book_module) values (#{name}, #{title}, #{introduction}, #{bookTypeId}, #{author}, #{wordCount}, #{section}, #{updateTime}, #{faceImg}, #{collectCount}, #{rewardCount}, #{discussCount}, #{readCount}, #{publishUserId}, #{isLast}, #{status},#{createTime},#{bookModule})
     </insert>
-    <select id="getBooksByList" resultMap="bookTypeMap">
+    <select id="getBooksByList" resultMap="booksMap">
         select id,name from t_books order by create_time desc limit 0,4
+    </select>
+    <select id="getListBooks" resultMap="booksMap" parameterType="string" statementType="STATEMENT" >
+        select id,name,collect_count,is_last,word_count,author from t_books order by ${ifVal} desc limit 0,10
     </select>
     <update id="updateStatus">
         update t_books set status=#{status} where id=#{id}

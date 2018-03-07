@@ -60,4 +60,9 @@ public class BooksServiceImpl implements BooksService {
     public List<BooksVo> getBooksByList() {
         return booksDAO.getBooksByList();
     }
+
+    @Override
+    public List<BooksVo> getListBooks(String ifVal) {
+        return booksDAO.getListBooks(ifVal);
+    }
 }
