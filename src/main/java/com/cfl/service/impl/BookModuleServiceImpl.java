@@ -60,4 +60,14 @@ public class BookModuleServiceImpl implements BookModuleService{
     public List<BookModuleVo> getInfo() {
         return bookModuleDAO.getInfo();
     }
+
+    @Override
+    public List<BookModuleVo> getInfos() {
+        return bookModuleDAO.getInfos();
+    }
+
+    @Override
+    public List<BookModuleVo> getMuLu(PageQuery pageQuery) {
+        return bookModuleDAO.getMuLu(pageQuery);
+    }
 }

@@ -13,4 +13,10 @@ public interface BooksDAO extends BaseDAO<BooksVo>{
     List<Select2Vo> getBooks();
     List<BooksVo> getBooksByList();
     List<BooksVo> getListBooks(@Param("ifVal") String ifVal);
+    List<BooksVo> getListByBook(PageQuery pageQuery);
+    List<BooksVo> getWanBen();
+    List<BooksVo> getFiveBooks();
+    void addBooks(Long id);
+    List<BooksVo> findBooksByLike(PageQuery pageQuery);
+    Long findCountBooksByLike(PageQuery pageQuery);
 }

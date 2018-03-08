@@ -44,6 +44,11 @@ public class BookTypeController {
         pagingBean.setrows(bookTypeService.listPage(new PageQuery(pagingBean.getStartIndex(),pagingBean.getPageSize())));
         return pagingBean;
     }
+    @RequestMapping("bookTypeAllList")
+    @ResponseBody
+    public List<BookTypeVo> bookTypeAllList() throws  Exception{
+        return bookTypeService.listAll();
+    }
     @RequestMapping("/bookTypeAddSave")
     @ResponseBody
     public Message addSaveBookType(BookTypeVo bookType,HttpSession session) throws  Exception {

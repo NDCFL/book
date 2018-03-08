@@ -7,6 +7,7 @@ import com.cfl.common.PagingBean;
 import com.cfl.common.StatusQuery;
 import com.cfl.enums.ActiveStatusEnum;
 import com.cfl.service.BooksService;
+import com.cfl.vo.BooksSectionVo;
 import com.cfl.vo.BooksVo;
 import com.cfl.vo.Select2Vo;
 import com.cfl.vo.UserVo;
@@ -25,6 +26,7 @@ import javax.json.Json;
 import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +49,7 @@ public class BooksController {
         pagingBean.setrows(booksService.listPage(new PageQuery(pagingBean.getStartIndex(),pagingBean.getPageSize())));
         return pagingBean;
     }
-    @RequestMapping("geBooksByList")
+    @RequestMapping("getBooksByList")
     @ResponseBody
     public List<BooksVo> geBooksByList() throws  Exception{
        return  booksService.getBooksByList();
@@ -73,6 +75,44 @@ public class BooksController {
         }
         return  booksService.getListBooks(ifVal);
     }
+    @RequestMapping("getListByBook")
+    @ResponseBody
+    public List<BooksVo> getListByBook(PageQuery pageQuery) throws  Exception{
+        String ifVal = "";
+        Integer id = Integer.parseInt(pageQuery.getId()+"");
+        if(id==null){
+            ifVal = "read_count";
+        }else {
+            switch (id){
+                case 0:
+                    ifVal = "read_count ";
+                    break;
+                case 1:
+                    ifVal = "collect_count ";
+                    break;
+                case 2:
+                    ifVal = "create_time ";
+                    break;
+            }
+        }
+        pageQuery.setSearchVal(ifVal);
+        return  booksService.getListByBook(pageQuery);
+    }
+    @RequestMapping("/getFiveBooks")
+    @ResponseBody
+    public List<BooksVo> getFiveBooks(){
+        return booksService.getFiveBooks();
+    }
+    @RequestMapping("/addBooks/{id}")
+    @ResponseBody
+    public Message addBooks(@PathVariable("id") Long id) {
+        try{
+            booksService.addBooks(id);
+            return Message.success("ok");
+        }catch (Exception e){
+            return Message.fail("ok");
+        }
+    }
     @RequestMapping("/booksAddSave")
     @ResponseBody
     public Message addSaveBooks(BooksVo books,HttpSession session) throws  Exception {
@@ -94,11 +134,52 @@ public class BooksController {
         }
 
     }
+    @RequestMapping("/mulu")
+    @ResponseBody
+    public PagingBean mulu(Integer pageSize,String searchVal,Integer pageNo){
+        PagingBean pagingBean = new PagingBean();
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setSearchVal(searchVal);
+        pageQuery.setPageNo(pageNo);
+        pageQuery.setPageSize(pageSize);
+        long count = booksService.findCountBooksByLike(pageQuery);
+        pagingBean.setTemp(count);
+        long pages = (long) Math.ceil((float)count/pageSize);
+        List<Select2Vo> muluList = new ArrayList<>();
+        for (int i=0;i<pages;i++){
+            Select2Vo select2Vo = new Select2Vo();
+            select2Vo.setId(i+1);
+            select2Vo.setText((i+1)+"/"+pages);
+            muluList.add(select2Vo);
+        }
+        pagingBean.setMulu(muluList);
+        pagingBean.setTotal(pages);
+        pagingBean.setrows(booksService.findBooksByLike(pageQuery));
+        return pagingBean;
+    }
+    @RequestMapping("/getMulu")
+    @ResponseBody
+    public List<BooksVo> getMulu(PageQuery pageQuery){
+        long count = booksService.findCountBooksByLike(pageQuery);
+        long pages = (long) Math.ceil((float)count/pageQuery.getPageSize());
+        if(pageQuery.getPageNo()>=pages){
+            pageQuery.setPageNo((int)pages);
+        }else if(pageQuery.getPageNo()<=1){
+            pageQuery.setPageNo(1);
+        }
+        pageQuery.setPageNo((pageQuery.getPageNo()-1)*pageQuery.getPageSize());
+        return booksService.findBooksByLike(pageQuery);
+    }
     @RequestMapping("/findBooks/{id}")
     @ResponseBody
     public BooksVo findBooks(@PathVariable("id") long id){
         BooksVo books = booksService.getById(id);
         return books;
+    }
+    @RequestMapping("/getWanBen")
+    @ResponseBody
+    public List<BooksVo> getWanBen(){
+        return booksService.getWanBen();
     }
     @RequestMapping("/booksUpdateSave")
     @ResponseBody

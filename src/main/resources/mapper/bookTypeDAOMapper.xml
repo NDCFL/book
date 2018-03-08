@@ -14,7 +14,7 @@
         select * from t_booktype  order by create_time desc limit #{pageNo},#{pageSize}
     </select>
     <select id="listAll" resultMap="bookTypeMap">
-        select * from t_booktype
+        select id,name from t_booktype where status=0
     </select>
     <select id="count" resultType="java.lang.Long">
         select count(*) from t_booktype

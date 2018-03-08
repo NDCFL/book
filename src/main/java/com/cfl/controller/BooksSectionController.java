@@ -7,10 +7,7 @@ import com.cfl.common.PagingBean;
 import com.cfl.common.StatusQuery;
 import com.cfl.enums.ActiveStatusEnum;
 import com.cfl.service.BooksSectionService;
-import com.cfl.vo.BooksSectionVo;
-import com.cfl.vo.MinAndMaxIdVo;
-import com.cfl.vo.Select2Vo;
-import com.cfl.vo.UserVo;
+import com.cfl.vo.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -97,6 +94,11 @@ public class BooksSectionController {
     public List<BooksSectionVo> getList(@PathVariable("id") long id){
         return booksSectionService.getList(id);
     }
+    @RequestMapping("/getFiveBooks")
+    @ResponseBody
+    public List<BooksSectionVo> getFiveBooks(@PathVariable("id") long id){
+        return booksSectionService.getList(id);
+    }
     @RequestMapping("/mulu")
     @ResponseBody
     public PagingBean mulu(long bookId,Integer pageSize,int sx){
@@ -151,7 +153,14 @@ public class BooksSectionController {
     public MinAndMaxIdVo getMaxAndMinVo(@PathVariable Long id){
         PageQuery pageQuery = new PageQuery();
         pageQuery.setBookId(id);
-        return booksSectionService.minAndMaxId(pageQuery);
+        MinAndMaxIdVo minAndMaxIdVo = new MinAndMaxIdVo();
+        minAndMaxIdVo = booksSectionService.minAndMaxId(pageQuery);
+        if(minAndMaxIdVo==null){
+            minAndMaxIdVo = new MinAndMaxIdVo();
+            minAndMaxIdVo.setMaxId(0l);
+            minAndMaxIdVo.setMinId(0l);
+        }
+        return minAndMaxIdVo;
     }
     @RequestMapping("/getMulu")
     @ResponseBody

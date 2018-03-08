@@ -15,6 +15,9 @@
     <select id="listPage" resultMap="booksMap">
         select t.*,(select name from t_booktype where t.book_type_id=t_booktype.id) as bookTypeName,(select name from t_book_module where t.book_module=t_book_module.id) as bookModuleName  from t_books t  order by t.create_time desc limit #{pageNo},#{pageSize}
     </select>
+    <select id="getFiveBooks" resultMap="booksMap">
+        select id,name,face_img,introduction,read_count,(select name from t_booktype where id=t_books.book_type_id) as bookTypeName from t_books order by read_count desc limit 0,5
+    </select>
     <select id="listAll" resultMap="booksMap">
         select * from t_books
     </select>
@@ -30,8 +33,23 @@
     <select id="getListBooks" resultMap="booksMap" parameterType="string" statementType="STATEMENT" >
         select id,name,collect_count,is_last,word_count,author from t_books order by ${ifVal} desc limit 0,10
     </select>
+    <select id="getListByBook" resultMap="booksMap" statementType="STATEMENT" >
+        select id,name,collect_count,word_count,introduction,face_img,read_count,(select name from t_booktype where id=t_books.book_type_id) as bookTypeName from t_books order by ${searchVal} desc limit ${pageNo},${pageSize}
+    </select>
+    <select id="getWanBen" resultMap="booksMap" >
+        select id,name,face_img,introduction,read_count,(select name from t_booktype where id=t_books.book_type_id) as bookTypeName from t_books where is_last=1   order by create_time desc limit 0,10
+    </select>
+    <select id="findBooksByLike" resultMap="booksMap">
+        select id,name,introduction,read_count,(select name from t_booktype where id=t_books.book_type_id) as bookTypeName from t_books where name LIKE CONCAT('%',#{searchVal},'%')  or author LIKE CONCAT('%',#{searchVal},'%') order by create_time desc limit #{pageNo},#{pageSize}
+    </select>
+    <select id="findCountBooksByLike" resultType="long">
+        select count(id) from t_books where name LIKE CONCAT('%',#{searchVal},'%')  or author LIKE CONCAT('%',#{searchVal},'%') order by create_time desc
+    </select>
     <update id="updateStatus">
         update t_books set status=#{status} where id=#{id}
+    </update>
+    <update id="addBooks" parameterType="long">
+        update t_books set read_count = read_count+1 where id=#{id}
     </update>
     <update id="update">
         update t_books set
