@@ -45,6 +45,6 @@ public class Message {
 
     public static  Message fail(String message){
 
-        return new Message(SUCCESS,message);
+        return new Message(FAIL,message);
     }
 }

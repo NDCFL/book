@@ -20,4 +20,6 @@ public interface UserDAO extends BaseDAO<UserVo>{
     String getPassword(long id);
     List<Select2Vo> getUser();
     UserVo findByPhone(String phone);
+    UserVo findByOpenid(@Param("qb") Integer qb,@Param("openid") String openid);
+
 }

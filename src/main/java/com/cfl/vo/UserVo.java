@@ -18,6 +18,8 @@ public class UserVo implements Serializable {
     private Double money;//'账户余额',
     private Integer status;//'是否启用，0代表启用，1代表禁用',
     private Date createTime;//'创建时间'
+    private String info;//用户的基本信息
+    private String faceImg;//用户头像
 
     public Long getId() {
         return id;
@@ -129,5 +131,21 @@ public class UserVo implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getFaceImg() {
+        return faceImg;
+    }
+
+    public void setFaceImg(String faceImg) {
+        this.faceImg = faceImg;
     }
 }

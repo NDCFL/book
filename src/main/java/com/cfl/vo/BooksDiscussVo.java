@@ -8,7 +8,7 @@ public class BooksDiscussVo implements Serializable {
     private Long userId;//'评论编号',
     private Long booksId;//'图书编号',
     private String content;//'评论内容',
-    private Date publishTime;//'评论时间'
+    private Date publishTime =  new Date();//'评论时间'
     private BooksVo booksVo;//图书组件
     private UserVo userVo;//用户组件
     public Long getId() {

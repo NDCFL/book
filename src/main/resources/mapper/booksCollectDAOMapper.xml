@@ -25,6 +25,9 @@
     <select id="listAll" resultMap="booksCollectMap">
         select * from t_book_collect
     </select>
+    <select id="findCollect" resultType="int">
+        select count(id) from t_book_collect where books_id=#{booksId} and user_id=#{userId}
+    </select>
     <select id="count" resultType="java.lang.Long">
         select count(t.id) from t_book_collect t,t_books b,t_user u where  t.books_id=b.id and t.user_id=u.id
     </select>

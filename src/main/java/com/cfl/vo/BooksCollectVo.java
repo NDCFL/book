@@ -7,7 +7,7 @@ public class BooksCollectVo implements Serializable  {
     private Long id;//'图书收藏编号',
     private Long userId;//'用户编号',
     private Long booksId;//'图书编号',
-    private Date createTime;//'收藏时间'
+    private Date createTime = new Date();//'收藏时间'
     private BooksVo booksVo;//图书组件
     private UserVo userVo;//用户组件
 

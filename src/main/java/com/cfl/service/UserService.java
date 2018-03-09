@@ -16,4 +16,5 @@ public interface UserService extends BaseService<UserVo>{
     String getPassword(long id);
     List<Select2Vo> getUser();
     UserVo findByPhone(String phone);
+    UserVo findByOpenid(Integer qb,String openid);
 }

@@ -82,4 +82,9 @@ public class UserServiceImpl implements UserService {
     public UserVo findByPhone(String phone) {
         return userDAO.findByPhone(phone);
     }
+
+    @Override
+    public UserVo findByOpenid(Integer qb, String openid) {
+        return userDAO.findByOpenid(qb, openid);
+    }
 }

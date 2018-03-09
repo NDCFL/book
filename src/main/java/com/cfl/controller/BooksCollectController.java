@@ -63,6 +63,16 @@ public class BooksCollectController {
         BooksCollectVo booksCollect = booksCollectService.getById(id);
         return booksCollect;
     }
+    @RequestMapping("/findCollect")
+    @ResponseBody
+    public Message findCollect(BooksCollectVo booksCollectVo){
+        int cnt = booksCollectService.findCollect(booksCollectVo);
+        if(cnt==0){
+            return Message.fail("0");
+        }else{
+            return  Message.success("1");
+        }
+    }
     @RequestMapping("/booksCollectUpdateSave")
     @ResponseBody
     public Message updateBooksCollect(BooksCollectVo booksCollect) throws  Exception{

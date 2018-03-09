@@ -1,5 +1,7 @@
 package com.cfl.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.cfl.common.Message;
 import com.cfl.common.StatusQuery;
 import com.cfl.common.UserAccountPasswordQuery;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.json.Json;
 import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
@@ -102,6 +105,45 @@ public class UserController  {
             return Message.success("资料修改成功！");
         }catch (Exception e){
             return Message.success("资料修改失败！");
+        }
+    }
+    @RequestMapping("findByOpenid")
+    @ResponseBody
+    public Message findByOpenid(Integer qb,String openid) {
+        System.out.println(openid+"================");
+        try{
+            UserVo userVo = userService.findByOpenid(qb, openid);
+            if(userVo==null){
+                return Message.fail("fail");
+            }else{
+                System.out.println(JSON.toJSONString(userVo));
+                return Message.success(JSON.toJSONString(userVo));
+            }
+        }catch (Exception e){
+            return Message.fail("fail");
+        }
+    }
+    @RequestMapping("addUserByQQ")
+    @ResponseBody
+    public Message addUserByQQ(String info,String openid) {
+        try{
+            //{"ret":0,"msg":"","is_lost":0,"nickname":"絮落锦乡","gender":"男","province":"江西","city":"赣州","year":"1997","figureurl":"http://qzapp.qlogo.cn/qzapp/101465328/A68429AF7D54895EF27AEE6477EF9C3A/30","figureurl_1":"http://qzapp.qlogo.cn/qzapp/101465328/A68429AF7D54895EF27AEE6477EF9C3A/50","figureurl_2":"http://qzapp.qlogo.cn/qzapp/101465328/A68429AF7D54895EF27AEE6477EF9C3A/100","figureurl_qq_1":"http://thirdqq.qlogo.cn/qqapp/101465328/A68429AF7D54895EF27AEE6477EF9C3A/40","figureurl_qq_2":"http://thirdqq.qlogo.cn/qqapp/101465328/A68429AF7D54895EF27AEE6477EF9C3A/100","is_yellow_vip":"0","vip":"0","yellow_vip_level":"0","level":"0","is_yellow_year_vip":"0"}
+            UserVo userVo = new UserVo();
+            userVo.setInfo(info);
+            JSONObject jsonObject= JSONObject.parseObject(info);
+            userVo.setName(jsonObject.get("nickname").toString());
+            userVo.setSex(jsonObject.get("gender").toString()=="男"?"0":"1");
+            userVo.setFaceImg(jsonObject.get("figureurl_qq_1").toString());
+            userVo.setIsVip(0);
+            userVo.setStatus(0);
+            userVo.setMoney(0d);
+            userVo.setQqopenid(openid);
+            userService.save(userVo);
+            System.out.println(userVo.getId()+"============");
+            return Message.success("ok");
+        }catch (Exception e){
+            e.printStackTrace();
+            return Message.fail("fail");
         }
     }
     @RequestMapping("checkPwd")
